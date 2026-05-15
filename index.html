@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The FermentIQ | AI-Powered Fermentation Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  /* The FermentIQ Brand Accent */
+  --green:#22a85a;
+  --green-light:#2ECC71;
+  --green-dim:#1a8c4a;
+  --green-dark:#167a3e;
+  --green-pale:#f4f4f4;
+  --green-soft:#e2e2e2;
+
+  /* Nav & Footer  keep green */
+  --nav-bg:#2ECC71;
+  --nav-bg2:#27AE60;
+  --footer-bg:#1E9E52;
+
+  /* Page/Section backgrounds  neutral */
+  --bg-black:#111111;
+  --bg-deep:#F5F5F5;
+  --bg-dark:#F7F7F7;
+  --bg-card:#FFFFFF;
+
+  /* Accents */
+  --accent:#22a85a;
+  --accent-mid:#1a8c4a;
+  --accent-light:#2ECC71;
+  --accent-glow:rgba(34,168,90,0.10);
+
+  /* Light section backgrounds */
+  --light-bg:#F5F5F5;
+  --light-card:#FFFFFF;
+  --light-border:#DDDDDD;
+  --text-dark:#111111;
+  --text-mid:#333333;
+  --text-muted:#555555;
+
+  /* Text  dark charcoal palette */
+  --white:#FFFFFF;
+  --txt-secondary:#333333;
+  --txt-dim:#888888;
+
+  /* UI Cards  neutral */
+  --card-bg:#FFFFFF;
+  --card-border:rgba(0,0,0,0.10);
+  --dark-card:#1A1A1A;
+  --dark-border:rgba(255,255,255,0.10);
+
+  --nav-h:72px;
+  --max-w:1200px;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --display:'Sora',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+  --ease-out:cubic-bezier(0,0,0.2,1);
+}
+
+body{font-family:var(--font);color:#111111;background:#FFFFFF;overflow-x:hidden;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:#eeeeee;}
+::-webkit-scrollbar-thumb{background:#999999;border-radius:2px;}
+
+img{display:block;max-width:100%;}
+
+/* ─── NAVBAR ─────────────────────────────────────────── */
+.navbar{
+  position:fixed;top:0;left:0;width:100%;height:var(--nav-h);
+  background:var(--nav-bg);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  z-index:1000;display:flex;align-items:center;
+  padding:0 clamp(16px,5vw,60px);
+  justify-content:space-between;
+  transition:border-color 0.3s;
+}
+.nav-logo{
+  font-family:var(--display);font-size:22px;font-weight:800;
+  color:var(--white);letter-spacing:-0.3px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;text-decoration:none;flex-shrink:0;
+}
+.nav-logo-icon{
+  width:40px;height:40px;
+  background:rgba(255,255,255,0.18);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.2);
+}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1;}
+.nav-logo-sub{font-size:10px;font-family:var(--mono);font-weight:500;color:rgba(255,255,255,0.65);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links li button{
+  background:none;border:none;
+  color:rgba(255,255,255,0.8);
+  font-size:11px;font-weight:600;
+  padding:8px 16px;border-radius:7px;
+  transition:all 0.22s var(--ease);
+  cursor:pointer;font-family:var(--mono);
+  letter-spacing:0.8px;text-transform:uppercase;
+  position:relative;white-space:nowrap;
+}
+.nav-links li button:hover{color:var(--white);background:rgba(255,255,255,0.1);}
+.nav-links li button.active{color:var(--white);background:rgba(255,255,255,0.14);}
+.nav-links li button.active::after{
+  content:'';position:absolute;bottom:5px;left:50%;
+  transform:translateX(-50%);width:14px;height:2px;
+  background:var(--white);border-radius:2px;
+}
+
+.nav-right{display:flex;align-items:center;gap:10px;}
+.btn-demo-nav{
+  background:rgba(255,255,255,0.18);
+  color:var(--white);border:1.5px solid rgba(255,255,255,0.35);padding:9px 20px;border-radius:8px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  transition:all 0.22s;font-family:var(--mono);
+  letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;
+}
+.btn-demo-nav:hover{transform:translateY(-1px);background:rgba(255,255,255,0.26);box-shadow:0 6px 20px rgba(0,0,0,0.2);}
+
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;flex-shrink:0;}
+.hamburger span{width:22px;height:2px;background:var(--white);border-radius:2px;transition:0.3s;display:block;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+.mobile-nav{
+  display:none;position:fixed;top:var(--nav-h);left:0;width:100%;
+  background:var(--nav-bg2);backdrop-filter:blur(20px);
+  padding:12px 20px 20px;flex-direction:column;gap:2px;
+  z-index:999;border-bottom:1px solid rgba(255,255,255,0.1);
+  animation:slideDown 0.25s var(--ease-out);
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.mobile-nav.open{display:flex;}
+.mobile-nav button{
+  background:none;border:none;color:rgba(255,255,255,0.8);
+  font-size:13px;font-weight:600;padding:13px 12px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  cursor:pointer;font-family:var(--mono);text-align:left;
+  text-transform:uppercase;letter-spacing:1px;
+  transition:color 0.2s,background 0.2s;border-radius:6px;
+}
+.mobile-nav button:hover{color:var(--white);background:rgba(255,255,255,0.08);}
+.mobile-nav .mob-cta{
+  margin-top:8px;background:rgba(255,255,255,0.2);
+  color:var(--white);border:none;padding:13px;
+  border-radius:8px;font-weight:700;font-size:12px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  font-family:var(--mono);
+}
+
+/* ─── PAGE SYSTEM ─────────────────────────────────────── */
+.page{display:none;min-height:100vh;padding-top:var(--nav-h);}
+.page.active{display:block;animation:pgIn 0.35s var(--ease);}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── SECTION COMMONS ─────────────────────────────────── */
+.label-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--green);margin-bottom:14px;
+}
+.label-tag::before{content:'';width:20px;height:1px;background:var(--green);}
+
+.label-tag-green{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--green-dim);margin-bottom:14px;
+}
+.label-tag-green::before{content:'';width:20px;height:1px;background:var(--green-dim);}
+
+.section-h2{
+  font-family:var(--display);font-size:clamp(28px,3.5vw,52px);
+  font-weight:800;line-height:1.1;letter-spacing:-0.8px;
+  margin-bottom:10px;
+}
+.section-h2.green{color:var(--green);}
+.section-h2.dark{color:#111111;}
+.section-h2.white{color:#111111;}
+
+.section-divider{width:56px;height:3px;margin:16px 0 28px;border-radius:2px;}
+.divider-green{background:linear-gradient(90deg,var(--green),transparent);}
+.divider-center{margin:16px auto 28px;}
+
+.para-dark{color:#444444;line-height:1.85;font-size:17px;}
+.para-light{color:#555555;line-height:1.85;font-size:17px;}
+
+.container{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);}
+
+/* ─── BUTTONS ─────────────────────────────────────────── */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:var(--white);padding:13px 28px;border-radius:8px;
+  text-decoration:none;font-weight:700;font-size:12px;
+  letter-spacing:0.8px;text-transform:uppercase;
+  transition:all 0.25s;font-family:var(--mono);border:none;cursor:pointer;
+  box-shadow:0 4px 16px rgba(46,204,113,0.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(46,204,113,0.45);}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid rgba(46,204,113,0.4);color:var(--green);
+  padding:12px 28px;border-radius:8px;text-decoration:none;
+  font-weight:700;font-size:12px;letter-spacing:0.8px;
+  text-transform:uppercase;transition:all 0.25s;
+  font-family:var(--mono);background:none;cursor:pointer;
+}
+.btn-secondary:hover{background:rgba(46,204,113,0.07);border-color:var(--green);}
+
+/* ─── STATUS INDICATORS ─────────────────────────────── */
+.risk-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:0.5px;
+}
+.risk-green{background:rgba(46,204,113,0.12);color:var(--green);border:1px solid rgba(46,204,113,0.3);}
+.risk-amber{background:rgba(255,186,0,0.12);color:#F5A623;border:1px solid rgba(255,186,0,0.25);}
+.risk-blue{background:rgba(74,178,120,0.12);color:#4DB87A;border:1px solid rgba(74,178,120,0.25);}
+.risk-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* ─── HERO ──────────────────────────────────────────────── */
+.hero{
+  position:relative;
+  padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,90px);
+  background:#FFFFFF;overflow:hidden;
+  min-height:calc(100vh - var(--nav-h));
+  display:flex;align-items:center;
+}
+.hero-noise{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(34,168,90,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,168,90,0.05) 1px,transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;z-index:0;
+}
+.hero-glow-1{
+  position:absolute;top:-200px;right:-100px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(46,204,113,0.08) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.hero-glow-2{
+  position:absolute;bottom:-150px;left:-100px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(34,168,90,0.06) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.hero-inner{
+  max-width:var(--max-w);margin:0 auto;
+  padding:0 clamp(16px,4vw,60px);
+  display:grid;grid-template-columns:1.15fr 0.85fr;
+  gap:clamp(30px,5vw,80px);align-items:center;
+  position:relative;z-index:1;width:100%;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(46,204,113,0.08);
+  border:1px solid rgba(46,204,113,0.28);
+  color:var(--green);font-size:10px;font-weight:700;
+  letter-spacing:2.5px;padding:6px 14px 6px 10px;
+  border-radius:4px;text-transform:uppercase;
+  margin-bottom:20px;font-family:var(--mono);
+}
+.hero-badge-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--green);
+  animation:pulse-dot 1.6s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.35;transform:scale(0.55);}}
+```css
+.hero{
+  position:relative;
+  padding:120px 6% 90px;
+  overflow:hidden;
+  background:#f4fff7; /* very light green */
+}
+
+/* remove grid & line backgrounds */
+.hero-grid-bg,
+.hero-rule{
+  display:none;
+}
+
+/* optional soft glow */
+.hero-glow-1{
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:rgba(34,197,94,0.08);
+  border-radius:50%;
+  top:-120px;
+  left:-100px;
+  filter:blur(90px);
+}
+
+.hero-glow-2{
+  position:absolute;
+  width:350px;
+  height:350px;
+  background:rgba(16,185,129,0.06);
+  border-radius:50%;
+  bottom:-120px;
+  right:-80px;
+  filter:blur(90px);
+}
+```
+
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(38px,4.5vw,68px);
+  line-height:1.06;font-weight:800;
+  letter-spacing:-1.5px;color:#111111;
+  margin-bottom:10px;
+}
+.hero h1 .green{color:var(--green);}
+
+.hero-rule{
+  width:64px;height:3px;
+  background:linear-gradient(90deg,var(--green),rgba(34,168,90,0.2));
+  margin:20px 0 24px;border-radius:2px;
+}
+.hero-body{
+  color:#444444;font-size:clamp(14px,1.5vw,19px);
+  line-height:1.8;margin-bottom:36px;max-width:540px;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* Score Card */
+.score-card{
+  background:linear-gradient(145deg,#f8f8f8,#efefef);
+  border:1.5px solid rgba(0,0,0,0.10);border-radius:18px;
+  padding:32px;position:relative;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
+}
+.score-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--green),var(--green-dark),transparent);
+}
+.score-card-label{
+  font-family:var(--mono);color:#555555;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.score-card-label::after{content:'';flex:1;height:1px;background:rgba(0,0,0,0.10);}
+.score-row{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 0;border-bottom:1px solid rgba(0,0,0,0.07);
+}
+.score-row:last-child{border-bottom:none;padding-bottom:0;}
+.score-icon{
+  width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:14px;
+}
+.score-icon.green-bg{background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);}
+.score-icon.amber-bg{background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.2);}
+.score-lbl{color:#333333;font-size:13px;flex:1;font-weight:500;}
+.score-val{
+  font-family:var(--display);color:#111111;
+  font-size:17px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.score-big{
+  margin-top:20px;padding-top:20px;
+  border-top:1px solid rgba(0,0,0,0.08);
+  display:flex;align-items:center;gap:18px;
+}
+.score-big-num{
+  font-family:var(--display);font-size:48px;font-weight:800;
+  color:var(--green);line-height:1;letter-spacing:-2px;
+}
+.score-big-info .label{color:#111111;font-weight:700;font-size:15px;margin-bottom:6px;}
+.score-big-info .sub{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ─── STATS STRIP ─────────────────────────────────────── */
+.stats-strip{
+  background:linear-gradient(135deg,#2ECC71,#22a85a);
+  border-top:1px solid rgba(255,255,255,0.15);
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  padding:clamp(32px,5vw,52px) 0;
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(20px,3vw,48px);
+}
+.stat-blk{border-left:2px solid rgba(255,255,255,0.25);padding-left:20px;}
+.stat-blk:first-child{border-left:none;padding-left:0;}
+.stat-num{
+  display:block;font-family:var(--display);
+  font-size:clamp(28px,3.5vw,42px);font-weight:800;
+  color:#ffffff;letter-spacing:-1px;line-height:1;
+  margin-bottom:8px;
+}
+.stat-txt{color:rgba(255,255,255,0.88);font-size:13px;line-height:1.55;margin-bottom:6px;}
+.stat-source{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;}
+
+/* ─── SECTION LIGHT (How It Works) ──────────────────────── */
+.section-light{
+  background:#FFFFFF;
+  padding:clamp(60px,8vw,100px) 0;
+}
+.process-card-img img{
+  width:70px;
+  height:70px;
+  object-fit:contain;
+}
+.process-intro{
+  max-width:680px;margin:0 auto 48px;text-align:center;
+}
+.process-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(16px,2.5vw,28px);
+}
+.process-card{
+  background:#FFFFFF;border-radius:14px;
+  overflow:hidden;border:1px solid #DDDDDD;
+  transition:transform 0.25s var(--ease),box-shadow 0.25s;
+}
+.process-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.10);}
+.process-card-img{
+  width:100%;height:160px;
+  background:linear-gradient(135deg,#F0F0F0,#E5E5E5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;
+}
+.process-card-body{padding:20px;}
+.step-tag{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  color:var(--green-dim);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.process-card h3{font-family:var(--display);color:#111111;font-size:17px;font-weight:700;margin-bottom:10px;}
+.process-card p{color:#555555;font-size:13.5px;line-height:1.65;}
+
+/* ─── SECTION DARK (Core Capabilities) ──────────────────── */
+.section-dark{
+  background:#F5F5F5;
+  padding:clamp(60px,8vw,100px) 0;
+}
+.platform-sub{max-width:720px;margin-bottom:48px;}
+.platform-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(16px,2.5vw,28px);
+}
+.platform-card{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:16px;overflow:hidden;
+  transition:transform 0.25s var(--ease),border-color 0.25s,box-shadow 0.25s;
+}
+.platform-card:hover{transform:translateY(-4px);border-color:#BBBBBB;box-shadow:0 20px 60px rgba(0,0,0,0.10);}
+.platform-card-img{
+  width:100%;height:170px;
+  background:linear-gradient(135deg,#E8E8E8,#D5D5D5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;position:relative;overflow:hidden;
+}
+.platform-card-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 50%,#FFFFFF 100%);
+}
+.platform-card .inner{padding:22px 24px 24px;}
+.element-badge{
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  color:var(--green);letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:10px;padding:3px 8px;
+  background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);
+  border-radius:4px;display:inline-block;
+}
+.platform-card h3{font-family:var(--display);color:#111111;font-size:18px;font-weight:700;margin-bottom:10px;}
+.platform-card p{color:#555555;font-size:14px;line-height:1.7;}
+.more-text{
+  color:#777777;font-size:13px;line-height:1.65;
+  margin-top:14px;max-height:0;overflow:hidden;
+  transition:max-height 0.4s var(--ease);
+}
+.platform-card.open .more-text{max-height:300px;}
+.expand-btn{
+  margin-top:16px;background:none;border:1px solid rgba(46,204,113,0.25);
+  color:var(--green);padding:7px 16px;border-radius:6px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  font-family:var(--mono);letter-spacing:0.5px;
+  transition:all 0.2s;
+}
+.expand-btn:hover{background:rgba(46,204,113,0.08);}
+
+/* ─── ABOUT PAGE ────────────────────────────────────────── */
+.about-hero{
+  padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,100px);
+  background:#FFFFFF;
+}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(40px,6vw,80px);align-items:start;
+}
+.about-para{
+  color:#555555;font-size:16px;line-height:1.8;margin-bottom:18px;
+}
+.about-tags{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  margin-top:28px;
+}
+.feature-tag{
+  background:#F5F5F5;border:1px solid #DDDDDD;
+  color:#333333;font-size:12px;font-weight:600;
+  padding:9px 14px;border-radius:7px;font-family:var(--mono);
+  letter-spacing:0.3px;
+}
+.founder-card{
+  background:#F8F8F8;border:1px solid #DDDDDD;
+  border-radius:16px;padding:28px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.founder-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+}
+.founder-tag{
+  font-family:var(--mono);font-size:9px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--green-dim);margin-bottom:10px;
+}
+.founder-card h4{font-family:var(--display);color:#111111;font-size:20px;font-weight:700;margin-bottom:4px;}
+.founder-title{color:#666666;font-size:13px;margin-bottom:14px;font-weight:500;}
+.founder-card p{color:#555555;font-size:14px;line-height:1.7;margin-bottom:12px;}
+
+/* ─── PLATFORM PAGE ─────────────────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,2vw,20px);margin-bottom:40px;}
+.kpi-card{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:12px;padding:20px 18px;text-align:center;
+  transition:border-color 0.25s;
+}
+.kpi-card:hover{border-color:#AAAAAA;}
+.kpi-num{font-family:var(--display);font-size:clamp(26px,3vw,38px);font-weight:800;color:var(--green);letter-spacing:-1px;margin-bottom:6px;}
+.kpi-lbl{color:#666666;font-size:12px;font-family:var(--mono);letter-spacing:0.5px;}
+
+/* ─── MARKET PAGE ────────────────────────────────────────── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.5vw,28px);margin-bottom:28px;}
+.chart-card{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:14px;padding:22px;
+}
+.chart-card-full{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:14px;padding:22px;margin-bottom:28px;
+}
+.chart-title{font-family:var(--display);color:#111111;font-size:16px;font-weight:700;margin-bottom:4px;}
+.chart-sub{color:#888888;font-size:12px;font-family:var(--mono);margin-bottom:16px;}
+.chart-wrap{height:240px;position:relative;}
+.chart-wrap-lg{height:360px;position:relative;}
+
+.market-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,24px);margin-bottom:36px;}
+.mkt-card{
+  background:#FFFFFF;
+  border:1px solid #DDDDDD;border-radius:12px;padding:20px;
+}
+.mkt-num{font-family:var(--display);font-size:clamp(28px,3vw,40px);font-weight:800;color:var(--green);letter-spacing:-1px;margin-bottom:6px;}
+.mkt-lbl{color:#555555;font-size:13px;line-height:1.5;}
+.mkt-source{font-family:var(--mono);font-size:9px;color:#999999;letter-spacing:1px;text-transform:uppercase;margin-top:8px;}
+
+/* ─── PRICING PAGE ───────────────────────────────────────── */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.5vw,28px);margin-bottom:56px;}
+.price-card{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:16px;padding:30px;position:relative;
+  transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;
+}
+.price-card:hover{transform:translateY(-4px);border-color:#AAAAAA;box-shadow:0 16px 48px rgba(0,0,0,0.10);}
+.price-card.featured{
+  border-color:var(--green);
+  box-shadow:0 0 0 1px rgba(46,204,113,0.15),0 24px 60px rgba(0,0,0,0.12);
+  background:linear-gradient(145deg,#1a1a1a,#111111);
+}
+.price-card.featured::before{
+  content:'MOST POPULAR';position:absolute;top:-1px;left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:var(--white);font-size:9px;font-weight:700;
+  font-family:var(--mono);letter-spacing:2px;
+  padding:4px 16px;border-radius:0 0 8px 8px;
+}
+.price-tier{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+.price-card h3{font-family:var(--display);color:#111111;font-size:22px;font-weight:800;margin-bottom:10px;}
+.price-card .desc{color:#666666;font-size:13px;line-height:1.6;margin-bottom:20px;}
+.price-amount{font-family:var(--display);font-size:clamp(36px,4vw,52px);font-weight:800;color:#111111;letter-spacing:-2px;}
+.price-period{font-family:var(--mono);font-size:10px;color:#999999;letter-spacing:1px;margin-bottom:24px;margin-top:4px;}
+.price-divider{height:1px;background:#EEEEEE;margin-bottom:22px;}
+.price-features{list-style:none;margin-bottom:28px;}
+.price-features li{
+  color:#555555;font-size:13.5px;padding:7px 0;
+  border-bottom:1px solid #F0F0F0;
+  display:flex;align-items:center;gap:10px;
+}
+.price-features li:last-child{border-bottom:none;}
+.chk{color:var(--green);font-weight:700;flex-shrink:0;}
+.price-btn{
+  width:100%;padding:13px;border-radius:8px;
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:0.8px;text-transform:uppercase;cursor:pointer;transition:all 0.25s;border:none;
+}
+.price-btn-outline{
+  background:none;border:1.5px solid rgba(46,204,113,0.35);color:var(--green);
+}
+.price-btn-outline:hover{background:rgba(46,204,113,0.07);}
+.price-btn-green{
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:var(--white);box-shadow:0 4px 16px rgba(46,204,113,0.3);
+}
+.price-btn-green:hover{box-shadow:0 8px 28px rgba(46,204,113,0.45);transform:translateY(-1px);}
+
+/* ─── FAQ ────────────────────────────────────────────────── */
+.faq-wrap{margin-bottom:48px;}
+.faq-item{
+  border-bottom:1px solid #EEEEEE;
+  padding:20px 0;
+}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;gap:20px;
+}
+.faq-q h4{font-family:var(--display);color:#111111;font-size:16px;font-weight:600;}
+.faq-icon{
+  color:var(--green);font-size:22px;font-weight:300;
+  flex-shrink:0;transition:transform 0.25s;
+}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-body{
+  color:#555555;font-size:14.5px;line-height:1.75;
+  max-height:0;overflow:hidden;
+  transition:max-height 0.35s var(--ease),padding 0.35s;
+}
+.faq-item.open .faq-body{max-height:300px;padding-top:14px;}
+
+/* ─── CONTACT ────────────────────────────────────────────── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start;}
+.contact-left-para{color:#555555;font-size:15px;line-height:1.75;margin-bottom:16px;}
+.contact-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.contact-icon{
+  width:40px;height:40px;background:#F5F5F5;
+  border:1px solid #DDDDDD;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.contact-item-text strong{display:block;color:#111111;font-size:13px;margin-bottom:2px;}
+.contact-item-text span{color:#666666;font-size:13px;}
+.contact-form-card{
+  background:#FFFFFF;border:1px solid #DDDDDD;
+  border-radius:16px;padding:36px;position:relative;overflow:hidden;
+}
+.contact-form-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--green-dark),transparent);
+}
+.contact-form-card h3{font-family:var(--display);color:#111111;font-size:22px;font-weight:800;margin-bottom:24px;}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-family:var(--mono);font-size:10px;font-weight:700;color:#888888;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.form-ctrl{
+  width:100%;background:#F8F8F8;
+  border:1px solid #DDDDDD;border-radius:8px;
+  padding:12px 16px;color:#111111;font-size:14px;
+  font-family:var(--font);transition:all 0.25s;outline:none;
+}
+.form-ctrl::placeholder{color:#AAAAAA;}
+.form-ctrl:focus{border-color:rgba(46,204,113,0.5);background:#FFFFFF;}
+.form-ctrl option{background:#FFFFFF;}
+.ta{resize:vertical;min-height:90px;}
+.form-submit{
+  width:100%;background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:var(--white);border:none;padding:14px;border-radius:8px;
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;cursor:pointer;transition:all 0.25s;
+}
+.form-submit:hover{box-shadow:0 6px 20px rgba(46,204,113,0.35);transform:translateY(-1px);}
+
+/* ─── FOOTER ───────────────────────────────────────────── */
+footer{background:var(--footer-bg);border-top:1px solid rgba(46,204,113,0.12);padding:clamp(40px,6vw,80px) 0 28px;}
+.footer-inner{max-width:var(--max-w);margin:0 auto;padding:0 clamp(16px,4vw,60px);}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:clamp(30px,5vw,80px);margin-bottom:40px;}
+.footer-logo{font-family:var(--display);color:var(--white);font-size:22px;font-weight:800;display:block;margin-bottom:14px;}
+.footer-brand p{color:rgba(255,255,255,0.75);font-size:13px;line-height:1.75;}
+.footer-col h5{font-family:var(--mono);color:var(--white);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px;}
+.footer-col a{display:block;color:rgba(255,255,255,0.7);font-size:13px;margin-bottom:10px;cursor:pointer;transition:color 0.2s;}
+.footer-col a:hover{color:var(--white);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.12);padding-top:20px;display:flex;flex-direction:column;gap:4px;}
+.footer-bottom p{color:rgba(255,255,255,0.65);font-size:12px;font-family:var(--mono);}
+.footer-bottom span{color:var(--white);}
+
+.price-card.featured h3{color:#FFFFFF;}
+.price-card.featured .desc{color:rgba(255,255,255,0.70);}
+.price-card.featured .price-amount{color:#FFFFFF;}
+.price-card.featured .price-period{color:rgba(255,255,255,0.55);}
+.price-card.featured .price-divider{background:rgba(255,255,255,0.12);}
+.price-card.featured .price-features li{color:rgba(255,255,255,0.80);border-bottom-color:rgba(255,255,255,0.07);}
+.price-card.featured .price-tier{color:var(--green-light);}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:900px){
+  .platform-grid{grid-template-columns:repeat(2,1fr);}
+  .pricing-grid{grid-template-columns:1fr 1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .market-kpi{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-links,.nav-right .btn-demo-nav{display:none;}
+  .hamburger{display:flex;}
+  .nav-right{gap:0;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-inner>div:last-child{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .process-grid{grid-template-columns:repeat(2,1fr);}
+  .platform-grid{grid-template-columns:1fr;}
+  .about-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px;}
+  .kpi-card{padding:16px 12px;}
+  .charts-grid{grid-template-columns:1fr;gap:16px;margin-bottom:16px;}
+  .chart-card{padding:16px;}
+  .chart-card-full{padding:16px;margin-bottom:16px;}
+  .chart-wrap{height:200px;}
+  .chart-wrap-lg{height:260px;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .market-kpi{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .process-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:1fr;}
+  .about-tags{grid-template-columns:1fr;}
+  .chart-wrap{height:180px;}
+  .chart-wrap-lg{height:220px;}
+}
+
+/* ─── MOBILE ENHANCEMENTS (≤768px) ──────────────────────────
+   All rules below only activate on mobile/tablet.
+   Zero changes to desktop layout (above 768px).
+   ─────────────────────────────────────────────────────────── */
+@media(max-width:768px){
+
+  /* --- General spacing & typography --- */
+  .container{padding:0 16px;}
+
+  .section-h2{font-size:clamp(24px,6vw,36px);letter-spacing:-0.4px;}
+  .para-dark,.para-light{font-size:15px;line-height:1.75;}
+  .label-tag,.label-tag-green{font-size:9px;letter-spacing:2px;}
+
+  /* --- Navbar --- */
+  .navbar{padding:0 16px;}
+  .nav-logo{gap:8px;}
+  .nav-logo-icon{width:34px;height:34px;font-size:17px;}
+  .nav-logo-text{font-size:18px;}
+  .nav-logo-sub{font-size:9px;letter-spacing:1.5px;}
+
+  /* --- Mobile nav menu --- */
+  .mobile-nav{padding:8px 16px 16px;}
+  .mobile-nav button{font-size:12px;padding:12px 10px;}
+
+  /* --- Hero section --- */
+  .hero{
+    padding:clamp(60px,10vw,90px) 0 clamp(40px,6vw,60px);
+    min-height:auto;
+    align-items:flex-start;
+  }
+  .hero-inner{
+    grid-template-columns:1fr;
+    gap:0;
+    padding:0 16px;
+  }
+  .hero h1{font-size:clamp(30px,8vw,44px);letter-spacing:-0.8px;}
+  .hero-body{font-size:15px;line-height:1.75;margin-bottom:28px;}
+  .hero-badge{font-size:9px;letter-spacing:1.5px;padding:5px 12px 5px 8px;}
+  .hero-btns{
+    flex-direction:column;
+    gap:10px;
+  }
+  .hero-btns .btn-primary,
+  .hero-btns .btn-secondary{
+    width:100%;
+    justify-content:center;
+    padding:14px 20px;
+    font-size:11px;
+  }
+  .hero-rule{margin:16px 0 20px;}
+
+  /* Score card  show on mobile but compact */
+  .hero-inner>div:last-child{
+    display:block !important;  /* override the display:none set elsewhere */
+    margin-top:28px;
+  }
+  .score-card{padding:20px 16px;border-radius:14px;}
+  .score-row{padding:9px 0;gap:10px;}
+  .score-icon{width:26px;height:26px;font-size:12px;}
+  .score-lbl{font-size:12px;}
+  .score-val{font-size:14px;}
+  .score-big{gap:12px;margin-top:16px;padding-top:16px;}
+  .score-big-num{font-size:38px;}
+  .score-big-info .label{font-size:13px;}
+
+  /* --- Stats strip --- */
+  .stats-strip{padding:clamp(24px,5vw,40px) 0;}
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+    gap:20px 12px;
+  }
+  .stat-blk{border-left:2px solid rgba(255,255,255,0.2);padding-left:14px;}
+  .stat-blk:first-child{border-left:none;padding-left:0;}
+  .stat-num{font-size:clamp(22px,6vw,32px);}
+  .stat-txt{font-size:12px;line-height:1.5;}
+  .stat-source{font-size:8px;}
+
+  /* --- How It Works / Process --- */
+  .section-light{padding:clamp(48px,7vw,72px) 0;}
+  .process-intro{margin-bottom:32px;padding:0 4px;}
+  .process-grid{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .process-card-img{height:100px;font-size:40px;}
+  .process-card-body{padding:14px;}
+  .process-card h3{font-size:14px;margin-bottom:6px;}
+  .process-card p{font-size:12.5px;line-height:1.6;}
+  .step-tag{font-size:8px;}
+
+  /* --- Core Capabilities / Platform cards --- */
+  .section-dark{padding:clamp(48px,7vw,72px) 0;}
+  .platform-sub{margin-bottom:32px;}
+  .platform-grid{grid-template-columns:1fr;gap:14px;}
+  .platform-card-img{height:120px;font-size:48px;}
+  .platform-card .inner{padding:18px 16px 20px;}
+  .platform-card h3{font-size:16px;margin-bottom:8px;}
+  .platform-card p{font-size:13px;}
+  .expand-btn{font-size:10px;padding:6px 14px;}
+  .element-badge{font-size:8px;}
+
+  /* --- KPI row (Platform page) --- */
+  .kpi-row{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:28px;
+  }
+  .kpi-card{padding:16px 12px;border-radius:10px;}
+  .kpi-num{font-size:clamp(24px,6vw,32px);}
+  .kpi-lbl{font-size:11px;}
+
+  /* --- About page --- */
+  .about-hero{padding:clamp(60px,10vw,90px) 0 clamp(40px,6vw,70px);}
+  .about-grid{grid-template-columns:1fr;gap:28px;}
+  .about-para{font-size:14.5px;line-height:1.75;margin-bottom:14px;}
+  .about-tags{grid-template-columns:1fr 1fr;gap:8px;margin-top:20px;}
+  .feature-tag{font-size:11px;padding:8px 10px;}
+
+  .founder-card{padding:20px;border-radius:14px;margin-bottom:16px;}
+  .founder-card h4{font-size:18px;}
+  .founder-title{font-size:12px;}
+  .founder-card p{font-size:13px;line-height:1.65;margin-bottom:10px;}
+  .founder-card .btn-primary,
+  .founder-card .btn-secondary{
+    width:100%;
+    justify-content:center;
+    font-size:10px;
+  }
+
+  /* --- Market page --- */
+  .market-kpi{
+    grid-template-columns:1fr;
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .mkt-card{padding:16px;}
+  .mkt-num{font-size:clamp(26px,7vw,36px);}
+  .mkt-lbl{font-size:12.5px;}
+  .mkt-source{font-size:8px;}
+
+  .charts-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .chart-card,.chart-card-full{
+    padding:16px;
+    border-radius:12px;
+  }
+  .chart-card-full{margin-bottom:14px;}
+  .chart-title{font-size:14px;}
+  .chart-sub{font-size:11px;}
+  .chart-wrap{height:200px;}
+  .chart-wrap-lg{height:240px;}
+
+  /* --- Pricing page --- */
+  .pricing-grid{
+    grid-template-columns:1fr;
+    gap:16px;
+    margin-bottom:40px;
+  }
+  .price-card{padding:24px 20px;border-radius:14px;}
+  .price-card.featured::before{font-size:8px;padding:3px 14px;}
+  .price-tier{font-size:8px;}
+  .price-card h3{font-size:20px;}
+  .price-card .desc{font-size:12.5px;}
+  .price-amount{font-size:clamp(34px,10vw,48px);}
+  .price-period{font-size:9px;}
+  .price-features li{font-size:13px;padding:6px 0;}
+  .price-btn{font-size:11px;padding:12px;}
+
+  /* --- FAQ --- */
+  .faq-wrap{margin-bottom:36px;}
+  .faq-item{padding:16px 0;}
+  .faq-q h4{font-size:14.5px;line-height:1.45;}
+  .faq-icon{font-size:20px;}
+  .faq-body{font-size:13.5px;line-height:1.7;}
+
+  /* --- Contact page --- */
+  .contact-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+  .contact-left-para{font-size:14px;}
+  .contact-icon{width:36px;height:36px;font-size:16px;}
+  .contact-item-text strong{font-size:12px;}
+  .contact-item-text span{font-size:12px;}
+  .contact-form-card{padding:24px 18px;border-radius:14px;}
+  .contact-form-card h3{font-size:19px;margin-bottom:20px;}
+  .form-label{font-size:9px;}
+  .form-ctrl{font-size:13.5px;padding:11px 14px;}
+  .form-submit{font-size:11px;padding:13px;}
+
+  /* --- Footer --- */
+  footer{padding:clamp(36px,6vw,60px) 0 24px;}
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:28px;
+    margin-bottom:28px;
+  }
+  .footer-logo{font-size:20px;}
+  .footer-brand p{font-size:12.5px;}
+  .footer-col h5{font-size:9px;margin-bottom:10px;}
+  .footer-col a{font-size:12.5px;margin-bottom:8px;}
+  .footer-bottom p{font-size:11px;}
+
+  /* --- Buttons (global mobile touch targets) --- */
+  .btn-primary,.btn-secondary{
+    padding:12px 22px;
+    font-size:11px;
+  }
+
+  /* --- Section padding tightening for small screens --- */
+  [class*="page-"] section[style*="padding"]{
+    /* Let clamp() handle it — no override needed */
+  }
+}
+
+/* ─── EXTRA-SMALL PHONES (≤400px) ─────────────────────────── */
+@media(max-width:400px){
+  .hero h1{font-size:28px;}
+  .stats-grid{grid-template-columns:1fr;}
+  .stat-blk{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,0.15);padding-top:16px;}
+  .stat-blk:first-child{border-top:none;padding-top:0;}
+  .process-grid{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:1fr 1fr;}
+  .about-tags{grid-template-columns:1fr;}
+  .market-kpi{grid-template-columns:1fr;}
+  .score-card-label{font-size:8px;}
+  .price-card{padding:20px 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar">
+  <a class="nav-logo" href="#" onclick="showPage('home');return false;">
+    <div class="nav-logo-text">
+      The FermentIQ
+      <span class="nav-logo-sub">Fermentation Intelligence</span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><button id="nav-home" class="active" onclick="showPage('home')">Home</button></li>
+    <li><button id="nav-about" onclick="showPage('about')">About</button></li>
+    <li><button id="nav-platform" onclick="showPage('platform')">Platform</button></li>
+    <li><button id="nav-market" onclick="showPage('market')">Market</button></li>
+    <li><button id="nav-pricing" onclick="showPage('pricing')">Pricing</button></li>
+    <li><button id="nav-contact" onclick="showPage('contact')">Contact</button></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn-demo-nav" onclick="showPage('contact')">Book a Demo</button>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button onclick="showPage('home');closeMobile()">Home</button>
+  <button onclick="showPage('about');closeMobile()">About</button>
+  <button onclick="showPage('platform');closeMobile()">Platform</button>
+  <button onclick="showPage('market');closeMobile()">Market</button>
+  <button onclick="showPage('pricing');closeMobile()">Pricing</button>
+  <button onclick="showPage('contact');closeMobile()">Contact</button>
+  <button class="mob-cta" onclick="showPage('contact');closeMobile()">Book a Demo →</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          UK's First AI-Native Dough Fermentation Intelligence Platform
+        </div>
+        <h1>Predict. <span class="green">Monitor.</span><br>Optimise.</h1>
+        <div class="hero-rule"></div>
+        <p class="hero-body">The FermentIQ transforms raw fermentation data into actionable dough-readiness intelligence  helping UK bakeries and pizzerias eliminate guesswork, reduce waste by 22%, and protect institutional baking knowledge through AI-driven consistency DNA.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showPage('contact')">Book a Demo →</button>
+          <button class="btn-secondary" onclick="showPage('platform')">Explore Platform</button>
+        </div>
+      </div>
+      <div>
+        <div class="score-card">
+          <div class="score-card-label">🟢 Live Fermentation Intelligence Monitor</div>
+          <div class="score-row">
+            <div class="score-icon green-bg">🌡️</div>
+            <span class="score-lbl">Batch Readiness Index (LFRI)</span>
+            <span class="score-val">96.7%</span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon green-bg">⚗️</div>
+            <span class="score-lbl">Active Batches Monitored</span>
+            <span class="score-val">24 batches</span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon amber-bg">⚠️</div>
+            <span class="score-lbl">Over-Proof Risk Flags</span>
+            <span class="score-val">2 <span class="risk-badge risk-amber"><span class="risk-dot"></span>Review</span></span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon green-bg">✅</div>
+            <span class="score-lbl">FSA Compliance Status</span>
+            <span class="score-val"><span class="risk-badge risk-green"><span class="risk-dot"></span>Compliant</span></span>
+          </div>
+          <div class="score-row">
+            <div class="score-icon green-bg">💰</div>
+            <span class="score-lbl">YTD Waste Reduction Savings</span>
+            <span class="score-val">£126K</span>
+          </div>
+          <div class="score-big">
+            <div class="score-big-num">93</div>
+            <div class="score-big-info">
+              <div class="label">Consistency DNA Score</div>
+              <div class="sub"><span class="risk-badge risk-green"><span class="risk-dot"></span>Batch Ready · Peak Window Active</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-blk">
+          <span class="stat-num">£3.2bn</span>
+          <div class="stat-txt">Annual cost of fermentation failures<br>to UK hospitality sector</div>
+          <span class="stat-source">UK Hospitality Report 2024</span>
+        </div>
+        <div class="stat-blk">
+          <span class="stat-num">900K</span>
+          <div class="stat-txt">Tonnes of bread discarded annually<br>in the United Kingdom</div>
+          <span class="stat-source">WRAP Food Waste Report</span>
+        </div>
+        <div class="stat-blk">
+          <span class="stat-num">30%</span>
+          <div class="stat-txt">Fermentation variance caused<br>by 1°C kitchen temperature shift</div>
+          <span class="stat-source">The FermentIQ R&D Data 2025</span>
+        </div>
+        <div class="stat-blk">
+          <span class="stat-num">£100</span>
+          <div class="stat-txt">Entry SaaS price per month<br>full fermentation intelligence access</div>
+          <span class="stat-source">The FermentIQ Starter Plan</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-light">
+    <div class="container">
+      <div class="process-intro">
+        <div class="label-tag-green">How It Works</div>
+        <h2 class="section-h2 dark">From Raw Ambient Signals to Predictive Dough Readiness in Real Time</h2>
+        <div class="section-divider divider-green divider-center"></div>
+        <p class="para-light">Every The FermentIQ deployment follows a proven four-stage fermentation intelligence journey  from signal ingestion and biological state mapping, to readiness prediction and automated intervention  all without requiring specialist food science expertise from your kitchen team.</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-card">
+          <img src="ferm1.jpg" alt="Monitor Icon">
+          <div class="process-card-body">
+            <div class="step-tag">STEP 01</div>
+            <h3>Ingest & Monitor</h3>
+            <p>Real-time capture of ambient temperature, humidity, CO₂ levels, and batch-specific ingredient data via IoT Fermentation Intelligence Units (FIUs) installed across kitchen zones.</p>
+          </div>
+        </div>
+        <div class="process-card">
+         <img src="ferm2.jpg" alt="Monitor Icon">
+          <div class="process-card-body">
+            <div class="step-tag">STEP 02</div>
+            <h3>Map & Classify</h3>
+            <p>The Fermentation State Ontology (FSO) engine maps biological signals to a structured Dough Intelligence profile  identifying yeast activity, pH drift, CO₂ production and over-proof risk in real time.</p>
+          </div>
+        </div>
+        <div class="process-card">
+         <img src="ferm3.jpg" alt="Monitor Icon">
+          <div class="process-card-body">
+            <div class="step-tag">STEP 03</div>
+            <h3>Predict & Alert</h3>
+            <p>The Latent Fermentation Readiness Index (LFRI) forecasts optimal readiness windows and automatically triggers alerts  moving kitchens from First-In-First-Out to First-Ready-First-Out (FRFO) logic.</p>
+          </div>
+        </div>
+        <div class="process-card">
+          <img src="ferm4.jpg" alt="Monitor Icon">
+          <div class="process-card-body">
+            <div class="step-tag">STEP 04</div>
+            <h3>Optimise & Preserve</h3>
+            <p>Every successful bake is encoded into Institutional Baking Memory  capturing expert dough logic as permanent Baking Equity, protecting consistency even through high staff turnover.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE CAPABILITIES -->
+  <section class="section-dark">
+    <div class="container">
+      <div class="label-tag">Core Capabilities</div>
+      <h2 class="section-h2 white">Five Intelligence Engines. One Fermentation Operating System.</h2>
+      <div class="section-divider divider-green"></div>
+      <p class="para-dark platform-sub">The FermentIQ combines five proprietary AI modules into a single dough-readiness intelligence platform  the only solution that unifies ambient signal ingestion, fermentation state mapping, predictive readiness scoring, batch diagnostics, and institutional memory preservation into one audit-ready quality infrastructure for UK bakeries and pizzerias.</p>
+      <div class="platform-grid">
+        <div class="platform-card">
+          <img src="ferm5.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Engine 01</div>
+            <h3>Real-Time Fermentation Monitoring</h3>
+            <p>IoT-based capture of pH, temperature, dissolved oxygen, pressure, and humidity across every dough batch. Continuous biological signals replace static wall thermometers and manual poke tests.</p>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More ↓</button>
+            <div class="more-text">Fermentation Intelligence Units (FIUs) connect to existing prover and retarder equipment. Data streams are ingested every 60 seconds, creating a real-time biological footprint for each batch. The system flags deviations from established "Dough DNA" baselines before they become waste events.</div>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm6.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Engine 02</div>
+            <h3>Latent Fermentation Readiness Index (LFRI)</h3>
+            <p>Proprietary biological scoring engine that converts raw ambient signals into a structured Fermentation State Ontology (FSO)  providing a real-time readiness score for every active batch.</p>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More ↓</button>
+            <div class="more-text">Unlike timer-based systems, LFRI accounts for flour-batch variance, seasonal humidity shifts, and equipment lag patterns. Prototype testing achieved 69% exact accuracy in identifying optimal readiness windows, versus 0% predictive capability from static timers.</div>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm7.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Engine 03</div>
+            <h3>Batch Delta Diagnostics (BDD)</h3>
+            <p>Automatically identifies the root cause of consistency erosion  whether flour-batch variance, prover lag, or night-time compressor drift  by analysing the delta between expected trajectory and actual field state.</p>
+            <button class="expand-btn" onclick="toggleCard(this)">Learn More ↓</button>
+            <div class="more-text">BDD reduces over-proofing incidents by flagging "clashing" readiness schedules across concurrent batches. In pilot deployments, diagnostics-led calibration reduced dough discards by 22% across 1,200 tested batches  translating directly to margin recovery.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end page home -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE: ABOUT
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <section class="about-hero">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <div class="label-tag-green">Our Mission</div>
+          <h2 class="section-h2 dark">Fermentation Intelligence Built from Real Kitchen Experience</h2>
+          <div class="section-divider divider-green"></div>
+          <p class="about-para">The FermentIQ was born from a critical, observed operational failure: UK bakeries and pizzerias manage dough fermentation using static timers and subjective "poke tests"  with no systematic way to monitor biological readiness, predict over-proofing risk, or preserve expert baking knowledge when senior staff leave.</p>
+          <p class="about-para">Our platform transforms fermentation management from a reactive, guesswork-driven process into an auditable, AI-driven quality workflow. We don't just log temperature  we model the relationship between every ambient signal and the biological state of the dough, creating a structured Fermentation State Ontology that enables predictive intervention before waste occurs.</p>
+          <p class="about-para">Founded by Rajashaker Reddy Thamira  a management professional with direct, award-winning experience managing high-volume pizza operations at Hala Group (Domino's)  The FermentIQ is domain expertise and operational truth encoded into intelligent SaaS infrastructure, built specifically for the 30,000+ UK pizzerias and independent bakeries operating in a low-margin, high-waste environment.</p>
+          <div class="about-tags">
+            <div class="feature-tag">Fermentation State Ontology (FSO)</div>
+            <div class="feature-tag">Latent Readiness Index (LFRI)</div>
+            <div class="feature-tag">Batch Delta Diagnostics (BDD)</div>
+            <div class="feature-tag">Institutional Baking Memory</div>
+            <div class="feature-tag">Signal-to-Action Auto-Synthesis</div>
+            <div class="feature-tag">Fermentation Intelligence Network (F-IN)</div>
+            <div class="feature-tag">UK FSA Compliant · UK GDPR</div>
+            <div class="feature-tag">Net Zero · Sustainability Aligned</div>
+          </div>
+        </div>
+        <div>
+          <div class="founder-card">
+            <div class="founder-tag">Founder &amp; CEO</div>
+            <h4>Rajashaker Reddy Thamira</h4>
+            <div class="founder-title">Hospitality Operations Expert · Platform Lead · Newcastle upon Tyne</div>
+            <p>MSc in Business and Management (with Advanced Practice) from Northumbria University, with a Bachelor's in Business Administration. Recognised as Best Employee of the Year 2023 at Hala Group (Domino's)  demonstrating exceptional mastery in store operations, inventory control, and staff management in one of the UK's busiest QSR environments.</p>
+            <p>Rajashaker's hands-on experience managing high-volume dough production gives him firsthand understanding of the "Consistency Gap"  the disconnect between timing on paper and biological readiness on the bench. His unique ability to bridge strategic management with kitchen-floor operational reality is the foundational advantage that makes The FermentIQ's approach defensible and authentic.</p>
+            <button class="btn-primary" onclick="showPage('contact')">Contact Founder →</button>
+          </div>
+          <div class="founder-card">
+            <div class="founder-tag">Growing the Team · Phase 2</div>
+            <h4>Strategic UK Hires</h4>
+            <div class="founder-title">Capability-Based Recruitment Plan · Newcastle to London</div>
+            <p>The FermentIQ is building its core team through a phased UK recruitment strategy: a Full-Stack Software Engineer to accelerate the Fermentation Readiness Engine; a Senior Data Scientist to refine the FSO and BDD models; and a QualityOps Success Lead to support onboarding of bakery and pizzeria clients across the North East.</p>
+            <p>All roles are UK-based, contributing to the creation of 20+ high-value technical and hospitality operations jobs by Year 5. The hiring plan aligns directly with the UK Government's Northern Powerhouse agenda and the national Net Zero food waste reduction targets.</p>
+            <button class="btn-secondary" onclick="showPage('market')">View Market Opportunity →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page about -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE: PLATFORM
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-platform">
+  <section class="section-dark" style="padding-top:clamp(80px,12vw,120px);">
+    <div class="container">
+      <div class="label-tag">The Platform</div>
+      <h2 class="section-h2 white">Every Layer of The FermentIQ's Dough Intelligence</h2>
+      <div class="section-divider divider-green"></div>
+      <p class="para-dark platform-sub">The FermentIQ is a cloud-native deeptech SaaS platform built on a modular architecture  React-based fermentation dashboards, FastAPI readiness workflow backend, structured Fermentation State Ontology data model, and UK GDPR-compliant infrastructure  designed to serve independent bakeries, multi-site pizzerias, and commissary kitchens without requiring a dedicated food science team.</p>
+
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-num">69%</div>
+          <div class="kpi-lbl">Readiness accuracy · prototype testing</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num">22%</div>
+          <div class="kpi-lbl">Dough waste reduction · pilot results</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num">28%</div>
+          <div class="kpi-lbl">Production speed increase · validated</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-num">4.6/5</div>
+          <div class="kpi-lbl">User satisfaction · institutional craft</div>
+        </div>
+      </div>
+
+      <div class="platform-grid">
+        <div class="platform-card">
+          <img src="ferm8.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 01</div>
+            <h3>IoT Signal Ingestion & Normalisation</h3>
+            <p>Fermentation Intelligence Units (FIUs) capture ambient temperature, humidity, CO₂ levels, and batch parameters in real time. Framework-agnostic connectivity with existing prover, retarder, and standard ambient shelving.</p>
+            <div class="more-text">Sensor data is normalised and mapped to batch-specific biological objects within the FSO framework. Every FIU deployment establishes a unique "Kitchen Fingerprint"  a combination of equipment layout, proofing frequency, and ambient patterns  that becomes the baseline for readiness inference.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm9.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 02</div>
+            <h3>Fermentation State Ontology (FSO)</h3>
+            <p>Proprietary schema that converts raw environmental signals into structured "Biological Objects"  mapping yeast activity, CO₂ production rates, pH drift, and moisture loss to dough-specific Fermentation DNA profiles.</p>
+            <div class="more-text">The FSO preserves the biological nuances of specific dough types  Neapolitan, sourdough, high-hydration  ensuring readiness inference is calibrated to product-level specificity. UK-trained models incorporate FSA safety standards, UK-specific flour enzymatic profiles, and regional climate data.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm10.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 03</div>
+            <h3>Latent Fermentation Readiness Index (LFRI)</h3>
+            <p>Predictive scoring engine that continuously calculates the hidden biological readiness state of every active batch  providing a dynamic "Peak Usability Window" that replaces static timers with biological truth.</p>
+            <div class="more-text">LFRI uses latent-state estimation architecture trained on UK-specific bakery and pizzeria data. The system self-calibrates through Fermentation Autocalibration (FAC)  continuously refining readiness thresholds using IoT sensor data, flour specifications, and historical baking outcomes.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm12.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 04</div>
+            <h3>Batch Delta Diagnostics (BDD)</h3>
+            <p>Automatically diagnoses root causes of consistency erosion  flour-batch variance, prover lag, seasonal humidity shifts  by analysing the delta between the system's expected fermentation trajectory and the actual field state.</p>
+            <div class="more-text">BDD identifies in real time how an environmental break (e.g., a 2°C rise in kitchen temperature or a flour lot shift) is impacting the reliability of the dough's readiness posture. The engine automatically prioritises high-risk batches for the prep line through the Risk-Weighted Usage Prioritisation pipeline.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm13.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 05</div>
+            <h3>Outcome-Learning Baking Memory</h3>
+            <p>Every successful bake is encoded as a structured "Baking Equity" asset  mapping product quality outcomes back to the original fermentation profiles, creating a self-improving institutional knowledge base.</p>
+            <div class="more-text">The Institutional Intelligence Preservation framework ensures new kitchen staff can immediately utilise established Dough DNA logic maps from their predecessors. This directly addresses the "competency cliff" and high staff turnover crisis facing UK hospitality, protecting expert fermentation knowledge as a permanent business asset.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+        <div class="platform-card">
+          <img src="ferm15.jpg" alt="Monitor Icon">
+          <div class="inner">
+            <div class="element-badge">Module 06</div>
+            <h3>Fermentation Intelligence Network (F-IN)</h3>
+            <p>Federated learning architecture enabling anonymous "Consistency Benchmarks" to be shared across UK bakery sites  allowing each facility to benefit from sector-wide trends without exposing private commercial data.</p>
+            <div class="more-text">Network-level intelligence improves as more sites join the F-IN. Trends learned from high-efficiency pizzerias in London can optimise proofing strategy for a new bakery in Newcastle  creating a collective intelligence ecosystem that new competitors would need years to replicate. Fully anonymised, UK GDPR compliant.</div>
+            <button class="expand-btn" onclick="toggleCard(this)">Expand ↓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page platform -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE: MARKET
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-market">
+  <section class="section-dark" style="padding-top:clamp(80px,12vw,120px);">
+    <div class="container">
+      <div class="label-tag">Market Analysis</div>
+      <h2 class="section-h2 white">A £3.2bn Problem. 30,000 Bakeries. Zero Direct AI Competition.</h2>
+      <div class="section-divider divider-green"></div>
+      <p class="para-dark" style="max-width:700px;margin-bottom:40px;">The UK bakery and pizzeria sector presents a structurally persistent market opportunity for The The FermentIQ. With 30,000+ independent and chain pizzerias, a £4.5 billion dough-based food market, and 72% of operators lacking any predictive fermentation tool, the demand for structured readiness intelligence is both urgent and completely underserved by existing software categories.</p>
+
+      <div class="market-kpi">
+        <div class="mkt-card">
+          <div class="mkt-num">£4.5bn</div>
+          <div class="mkt-lbl">Total annual value of the UK bakery and pizzeria sector  the target addressable market for The FermentIQ's QualityOps infrastructure</div>
+          <div class="mkt-source">UK Hospitality Report 2024</div>
+        </div>
+        <div class="mkt-card">
+          <div class="mkt-num">30,000+</div>
+          <div class="mkt-lbl">Independent and chain pizzerias operating across the UK by 2025  one of the largest hospitality employer segments in the country</div>
+          <div class="mkt-source">UK Foodservice Intelligence 2024</div>
+        </div>
+        <div class="mkt-card">
+          <div class="mkt-num">USD 10.8bn</div>
+          <div class="mkt-lbl">Global AI-driven food production intelligence market in 2024, projected at 24.2% CAGR through 2034  the macro category The FermentIQ competes within</div>
+          <div class="mkt-source">FoodTech AI Market Report 2025</div>
+        </div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">UK Bakery Sector  Adoption Gap</div>
+          <div class="chart-sub">Fermentation management method by operator type (%)</div>
+          <div class="chart-wrap"><canvas id="chartSector"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Root Causes of Fermentation Failure</div>
+          <div class="chart-sub">Primary drivers of dough waste reported by UK operators</div>
+          <div class="chart-wrap"><canvas id="chartRootCause"></canvas></div>
+        </div>
+      </div>
+
+      <div class="chart-card-full">
+        <div class="chart-title">Competitive Positioning  UK Fermentation Intelligence Landscape</div>
+        <div class="chart-sub">The FermentIQ vs existing platform categories across key capability dimensions</div>
+        <div class="chart-wrap-lg"><canvas id="chartRadar"></canvas></div>
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">AI FoodTech Market Growth 2022–2030</div>
+          <div class="chart-sub">Global market expansion trajectory (USD Billion)</div>
+          <div class="chart-wrap"><canvas id="chartGrowth"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">The FermentIQ vs Competitors  Capability Score</div>
+          <div class="chart-sub">Feature coverage comparison across fermentation intelligence dimensions</div>
+          <div class="chart-wrap"><canvas id="chartPerf"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page market -->
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE: PRICING
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-pricing">
+  <section style="background:#FFFFFF;padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,100px);">
+    <div class="container">
+      <div class="label-tag">Pricing Plans</div>
+      <h2 class="section-h2 green">Intelligent Fermentation at Bakery-Friendly Pricing</h2>
+      <div class="section-divider divider-green"></div>
+      <p class="para-dark" style="max-width:640px;margin-bottom:48px;">Three subscription tiers designed to grow with your production volume and site complexity. All plans include the full The FermentIQ fermentation monitoring workflow, Batch Delta Diagnostics engine, and real-time readiness alerts. No food science degree required. No enterprise-level capital expenditure.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-tier">Starter Plan</div>
+          <h3>Essential</h3>
+          <p class="desc">For independent SME pizzerias and artisan bakeries wanting an affordable, structured alternative to manual poke tests and static timers.</p>
+          <span class="price-amount">£100</span>
+          <div class="price-period">/ MONTH · BILLED MONTHLY</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="chk">✓</span> Real-time batch monitoring (1 dough type)</li>
+            <li><span class="chk">✓</span> Consistency DNA visualisation dashboard</li>
+            <li><span class="chk">✓</span> Basic fermentation drift detection</li>
+            <li><span class="chk">✓</span> Over-proof risk alerts</li>
+            <li><span class="chk">✓</span> Framework-agnostic IoT mapping</li>
+            <li><span class="chk">✓</span> Mobile-ready readiness notifications</li>
+            <li><span class="chk">✓</span> 3 platform users</li>
+          </ul>
+          <button class="price-btn price-btn-outline" onclick="showPage('contact')">Get Started</button>
+        </div>
+
+        <div class="price-card featured">
+          <div class="price-tier">Professional Plan</div>
+          <h3>Professional</h3>
+          <p class="desc">For mid-market hospitality groups and regional commissary kitchens requiring full Batch Delta Diagnostics and POS/Inventory integrations.</p>
+          <span class="price-amount">£250</span>
+          <div class="price-period">/ MONTH · BILLED MONTHLY</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="chk">✓</span> Full Batch Delta Diagnostics (BDD)</li>
+            <li><span class="chk">✓</span> Signal-to-Action Auto-Synthesis</li>
+            <li><span class="chk">✓</span> Latent Fermentation Readiness Index (LFRI)</li>
+            <li><span class="chk">✓</span> Outcome-Learning Baking Memory</li>
+            <li><span class="chk">✓</span> POS & Inventory system integrations</li>
+            <li><span class="chk">✓</span> Fermentation Autocalibration (FAC)</li>
+            <li><span class="chk">✓</span> 10 platform users</li>
+          </ul>
+          <button class="price-btn price-btn-green" onclick="showPage('contact')">Start Free Pilot</button>
+        </div>
+
+        <div class="price-card">
+          <div class="price-tier">Enterprise Plan</div>
+          <h3>Enterprise</h3>
+          <p class="desc">For global hospitality corporations and multi-site franchise networks requiring Fermentation Intelligence Network access and dedicated QualityOps management.</p>
+          <span class="price-amount">£500</span>
+          <div class="price-period">/ MONTH · CUSTOM PRICING</div>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span class="chk">✓</span> Readiness-to-Graph Pipeline</li>
+            <li><span class="chk">✓</span> Fermentation Intelligence Network (F-IN) access</li>
+            <li><span class="chk">✓</span> Multi-site Consistency DNA benchmarking</li>
+            <li><span class="chk">✓</span> Advanced Institutional Baking Memory</li>
+            <li><span class="chk">✓</span> Dedicated QualityOps Manager</li>
+            <li><span class="chk">✓</span> White-label Fermentation Reports</li>
+            <li><span class="chk">✓</span> Unlimited users + API access</li>
+          </ul>
+          <button class="price-btn price-btn-outline" onclick="showPage('contact')">Contact Sales</button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="label-tag">FAQ</div>
+      <h3 style="font-family:var(--display);color:var(--green);font-size:clamp(22px,3vw,30px);font-weight:800;margin-bottom:28px;letter-spacing:-0.3px;">Common Questions</h3>
+      <div class="faq-wrap">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)">
+            <h4>Do I need a food science background to use The FermentIQ?</h4>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-body">No. The FermentIQ is specifically designed for head bakers, store managers, and operations directors without food science training. The guided dashboard with automated readiness alerts and plain-language Dough Intelligence Reports means your kitchen team can act on biological insights without interpreting raw sensor data. Our design principle: a bakery manager should be able to prevent over-proofing and protect their batch quality without calling a laboratory.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)">
+            <h4>How is The FermentIQ different from digital kitchen checklists or smart provers?</h4>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-body">Digital checklist tools like Jolt or Squiz can tell you the fridge is 4°C  they cannot tell you why the dough isn't rising or predict when it will be ready. Smart prover hardware has timers but zero "perception layer" to verify actual biological dough state. The FermentIQ operates in an entirely different category: we model the biological state behind the dough, build a Fermentation State Ontology, score readiness continuously, and generate predictive intervention pathways. We are the operating system for fermentation intelligence that sits between your equipment and your kitchen decisions.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)">
+            <h4>What hardware is required to deploy The FermentIQ?</h4>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-body">The FermentIQ deploys via lightweight, IoT-integrated Fermentation Intelligence Units (FIUs)  compact sensor nodes that connect to your existing kitchen environment without requiring replacement of ovens, provers, or retarders. The platform is infrastructure-agnostic: it sits above any existing equipment through a secure API layer. Hardware setup takes less than a day per site, and onboarding has been validated at under 14 days to full "readiness-check proficiency" for kitchen staff.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)">
+            <h4>How does Institutional Baking Memory protect against staff turnover?</h4>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-body">Every successful bake logged on the The FermentIQ platform is encoded as a structured "Dough DNA" profile  mapping product quality outcomes back to the specific ambient conditions, batch parameters, and fermentation windows that produced them. This creates a permanent, searchable library of institutional baking expertise. When a senior baker leaves, their fermentation knowledge does not leave with them  it remains as organisational Baking Equity, accessible by any new staff member through the platform's guided readiness workflows.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFAQ(this)">
+            <h4>Can I trial The FermentIQ before committing to a subscription?</h4>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-body">Yes  The FermentIQ is currently recruiting 8–12 North-East based independent pizzerias and artisan bakeries for a structured 8-week pilot validation programme at pilot-access pricing. Participants receive full platform access, founder-led onboarding support, FIU hardware for the trial period, and direct input into the product roadmap. We're targeting businesses managing daily dough production with at least 2–3 batch types. Contact us to apply for a pilot partnership position.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end page pricing -->
+
+<!-- ═══════════════════════════════════════════
+     PAGE: CONTACT
+═══════════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <section style="background:#FFFFFF;padding:clamp(80px,12vw,120px) 0 clamp(60px,8vw,100px);">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- LEFT CONTENT -->
+        <div>
+          <div class="label-tag">Get In Touch</div>
+          <h2 class="section-h2 green">Join the The FermentIQ Pilot Programme</h2>
+          <div class="section-divider divider-green"></div>
+
+          <p class="contact-left-para">
+            The FermentIQ is currently recruiting 8–12 North-East based independent pizzerias and artisan bakeries for a structured 8-week validation programme. We're targeting head bakers, store managers, and operations directors at businesses managing daily high-volume dough production  particularly Neapolitan-style pizzerias, sourdough bakeries, and commissary kitchens.
+          </p>
+
+          <p class="contact-left-para" style="margin-bottom:28px;">
+            Get in touch to schedule a live platform walkthrough and discuss how The FermentIQ can transform your fermentation management from reactive guesswork into a predictive, data-driven quality system  eliminating dough waste, protecting your Baking Equity, and improving batch consistency from day one.
+          </p>
+
+          <div class="contact-item">
+            <div class="contact-icon">🌐</div>
+            <div class="contact-item-text"><strong>Website</strong><span>thefermentiq.com</span></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-item-text"><strong>Location</strong><span>Newcastle upon Tyne, United Kingdom</span></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🛡️</div>
+            <div class="contact-item-text"><strong>Data Infrastructure</strong><span>UK Cloud Hosting · UK Data Sovereignty · FSA Aligned</span></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🔬</div>
+            <div class="contact-item-text"><strong>Technology</strong><span>AI-Native · IoT-Integrated · Framework-Agnostic</span></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">✅</div>
+            <div class="contact-item-text"><strong>Compliance</strong><span>UK GDPR · FSA-Aligned · Net Zero Reporting · AI Principles Framework</span></div>
+          </div>
+        </div>
+
+<form class="contact-form-card"
+      action="https://api.web3forms.com/submit"
+      method="POST">
+
+  <!-- Web3Forms Access Key -->
+  <input type="hidden" name="access_key" value="6a3aa253-47fb-4125-864d-3331adcb06bc">
+
+  <h3>Book a Demo</h3>
+
+  <div class="form-group">
+    <label class="form-label">Full Name</label>
+    <input type="text" name="name" class="form-ctrl"
+      placeholder="Your name" required>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Business Name</label>
+    <input type="text" name="business" class="form-ctrl"
+      placeholder="Your bakery or pizzeria" required>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Email Address</label>
+    <input type="email" name="email" class="form-ctrl"
+      placeholder="your@business.co.uk" required>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Business Type</label>
+    <select name="type" class="form-ctrl" required>
+      <option value="">Select your business type</option>
+      <option>Independent Artisan Bakery</option>
+      <option>Pizzeria (Independent)</option>
+      <option>Multi-Site Pizzeria Chain</option>
+      <option>Commissary Kitchen</option>
+      <option>Sourdough Specialist</option>
+      <option>Other Dough-Based Production</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Daily Dough Batch Volume</label>
+    <select name="volume" class="form-ctrl" required>
+      <option value="">Select volume</option>
+      <option>1–5 batches per day</option>
+      <option>5–15 batches per day</option>
+      <option>15–30 batches per day</option>
+      <option>30+ batches per day</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Current Fermentation Challenge</label>
+    <textarea name="message" class="form-ctrl ta" required
+      placeholder="Over-proofing, inconsistent quality, staff turnover & knowledge loss, waste costs, or scaling to multiple sites..."></textarea>
+  </div>
+
+  <button class="form-submit" type="submit">
+    Submit Demo Request →
+  </button>
+
+</form>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="footer-logo">The FermentIQ</span>
+        <p>The UK's first AI-native dough fermentation intelligence platform  transforming raw ambient signals into predictive readiness logic using a proprietary Latent Fermentation Readiness Index (LFRI), Fermentation State Ontology (FSO), and Batch Delta Diagnostics (BDD) to help UK bakeries and pizzerias eliminate the Consistency Gap, protect Institutional Baking Memory, and achieve zero-waste dough production.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a onclick="showPage('platform')">Fermentation Monitoring</a>
+        <a onclick="showPage('platform')">Readiness Index (LFRI)</a>
+        <a onclick="showPage('platform')">Batch Delta Diagnostics</a>
+        <a onclick="showPage('platform')">Baking Memory Engine</a>
+        <a onclick="showPage('platform')">Intelligence Network (F-IN)</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a onclick="showPage('about')">About The FermentIQ</a>
+        <a onclick="showPage('market')">Market Analysis</a>
+        <a onclick="showPage('pricing')">Pricing &amp; Plans</a>
+        <a onclick="showPage('contact')">Book a Demo</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>The FermentIQ</span> · Newcastle upon Tyne, UK · UK GDPR Compliant · FSA-Aligned Architecture · AI-Native Platform</p>
+      <p><span>thefermentiq.com</span> · Innovator Founder Visa Application · Strictly Confidential</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+/* ─── PAGE NAV ───────────────────────────────── */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  if(pg){pg.classList.add('active');}
+  const btn=document.getElementById('nav-'+name);
+  if(btn){btn.classList.add('active');}
+  window.scrollTo({top:0,behavior:'instant'});
+  if(name==='market'&&!window.marketChartsLoaded){initMarketCharts();window.marketChartsLoaded=true;}
+}
+
+function toggleCard(btn){
+  const card=btn.closest('.platform-card');
+  const isOpen=card.classList.contains('open');
+  document.querySelectorAll('.platform-card').forEach(c=>{
+    c.classList.remove('open');
+    const eb=c.querySelector('.expand-btn');
+    if(eb){eb.textContent=eb.textContent.includes('Expand')?'Expand ↓':'Learn More ↓';}
+  });
+  if(!isOpen){
+    card.classList.add('open');
+    btn.textContent=btn.textContent.includes('Expand')?'Collapse ↑':'Show Less ↑';
+  }
+}
+
+function toggleFAQ(el){
+  el.parentElement.classList.toggle('open');
+}
+
+function closeMobile(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('mobileNav').classList.toggle('open');
+});
+
+function handleSubmit(e){
+  e.preventDefault();
+  document.getElementById('formSuccess').style.display='block';
+}
+
+/* ─── CHART THEME ────────────────────────────── */
+const GREEN='rgba(34,168,90,1)';
+const GREEN2='rgba(34,168,90,0.75)';
+const GREEN3='rgba(34,168,90,0.4)';
+const GREEN4='rgba(22,122,62,0.7)';
+const GREEN5='rgba(82,200,130,0.6)';
+const GRID='rgba(0,0,0,0.06)';
+const MUTED='rgba(80,80,80,0.85)';
+
+Chart.defaults.font.family="'IBM Plex Mono', monospace";
+Chart.defaults.font.size=11;
+Chart.defaults.color=MUTED;
+
+/* ─── MARKET CHARTS ──────────────────────────── */
+function initMarketCharts(){
+  // Adoption Gap
+  new Chart(document.getElementById('chartSector').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['Paper Logs & Timers','Basic Digital Checklists','IoT Temp Logging','Smart Prover Timers','AI Predictive System'],
+      datasets:[{
+        label:'% of UK Operators',
+        data:[58,26,10,4,2],
+        backgroundColor:[GREEN,GREEN2,GREEN3,'rgba(30,158,82,0.3)','rgba(82,217,138,0.25)'],
+        borderRadius:5,barPercentage:0.6
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:MUTED,font:{size:10}}}}}
+  });
+
+  // Root Cause
+  new Chart(document.getElementById('chartRootCause').getContext('2d'),{
+    type:'doughnut',
+    data:{
+      labels:['Static Timer Failure (58%)','Temperature Variance (42%)','Humidity Shifts (35%)','Flour Batch Variance (28%)','Night Compressor Lag (22%)'],
+      datasets:[{
+        data:[58,42,35,28,22],
+        backgroundColor:[GREEN,GREEN2,GREEN3,GREEN4,GREEN5],
+        borderColor:[GREEN,GREEN2,GREEN3,GREEN4,GREEN5],
+        borderWidth:1.5
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:10,font:{size:10}}}}}
+  });
+
+  // Radar Competitive
+  new Chart(document.getElementById('chartRadar').getContext('2d'),{
+    type:'radar',
+    data:{
+      labels:['Biological Inference','Batch Delta Diagnostics','FRFO Optimisation','Institutional Memory','Predictive Readiness','UK FSA Compliance'],
+      datasets:[
+        {label:'The FermentIQ',data:[5,5,5,5,5,5],backgroundColor:'rgba(46,204,113,0.12)',borderColor:GREEN,borderWidth:2,pointBackgroundColor:GREEN},
+        {label:'Digital Checklists (Jolt/Squiz)',data:[1,1,1,1,1,2],backgroundColor:'rgba(82,217,138,0.07)',borderColor:GREEN3,borderWidth:1.5,pointBackgroundColor:GREEN3},
+        {label:'Enterprise Rheology (KPM)',data:[4,2,1,1,3,3],backgroundColor:'rgba(30,158,82,0.06)',borderColor:GREEN4,borderWidth:1.5,pointBackgroundColor:GREEN4},
+        {label:'Smart Prover Hardware',data:[1,1,2,1,1,2],backgroundColor:'rgba(138,204,168,0.06)',borderColor:'rgba(138,204,168,0.5)',borderWidth:1.5,pointBackgroundColor:'rgba(138,204,168,0.5)'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:14,font:{size:10}}}},scales:{r:{backgroundColor:'rgba(46,204,113,0.01)',grid:{color:GRID},pointLabels:{color:MUTED,font:{size:10}},ticks:{display:false},min:0,max:5}}}
+  });
+
+  // Market Growth
+  new Chart(document.getElementById('chartGrowth').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['2022','2023','2024','2025','2026','2027','2028','2030'],
+      datasets:[
+        {label:'Global AI FoodTech Market (USD B)',data:[4.2,5.8,10.8,13.5,17.1,21.8,27.4,45.2],backgroundColor:GREEN4,borderRadius:5,barPercentage:0.55},
+        {type:'line',label:'UK FoodTech AI Adoption %',data:[null,8,12,18,24,30,36,48],borderColor:GREEN,borderWidth:2,yAxisID:'y2',tension:0.4,pointBackgroundColor:GREEN,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:12,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>'$'+v+'B'}},y2:{position:'right',grid:{display:false},ticks:{color:MUTED,callback:v=>v+'%'}}}}
+  });
+
+  // Performance Comparison
+  new Chart(document.getElementById('chartPerf').getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:['Biological Inference','Batch Diagnostics','Readiness Score','Institutional Memory','Waste Prediction','FSO Mapping'],
+      datasets:[
+        {label:'The FermentIQ',data:[95,92,90,95,88,96],backgroundColor:GREEN2,borderRadius:5,barPercentage:0.35},
+        {label:'Existing UK Tools Avg',data:[5,8,5,3,8,5],backgroundColor:GREEN3,borderRadius:5,barPercentage:0.35}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:MUTED,boxWidth:10,padding:14,font:{size:10}}}},scales:{x:{grid:{color:GRID},ticks:{color:MUTED,font:{size:9}}},y:{grid:{color:GRID},ticks:{color:MUTED,callback:v=>v+' pts'}}}}
+  });
+}
+</script>
+</body>
+</html>
